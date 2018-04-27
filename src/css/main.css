@@ -1,0 +1,31 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.portfolio {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font-size: 0.7em;
+}
+
+.portfolio .header-row, .portfolio .stock-row {
+  display: flex;
+}
+
+.portfolio .header-row {
+  background: rgba(0, 128, 255, 0.2);
+}
+.portfolio .stock-row:nth-child(even) {
+  background: white;
+}
+
+.portfolio .stock-row:nth-child(odd) {
+  background: rgba(112, 128, 144, 0.2);
+}
+
+.portfolio .header-row .header, .portfolio .stock-row .stock {
+  width: 10%;
+  border: solid 1px white;
+  padding: 0.3em;
+}
