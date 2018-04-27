@@ -7,9 +7,7 @@ export const getGainLoss = (stock) => getMarketValue(stock) - getEntryValue(stoc
 export const getDividend = (stock) => getMarketValue(stock) * stock.dividend_percentage / 100;
 
 export const getWeight = (stocks, stock, total) => {
-  const reducer = (accumulator, currentValue) => {
-    return accumulator + getEntryValue(currentValue);
-  }
+  const reducer = (accumulator, currentValue) => accumulator + getEntryValue(currentValue);
 
   let selectedStockTotal =
     stocks

@@ -49,7 +49,7 @@ class Portfolio extends Component {
   componentDidMount() {
     // get updated market price
     let allStocks = [];
-    this.state.stocks.map((stock, index) => {
+    this.state.stocks.forEach((stock, index) => {
       if (allStocks.indexOf(stock.symbol) < 0) {
         allStocks.push(stock.symbol);
       }
@@ -59,7 +59,7 @@ class Portfolio extends Component {
         return response.json();
       })
       .then((myJson) => {
-        this.state.stocks.map((stock, index) => {
+        this.state.stocks.forEach((stock, index) => {
           let newStocks = [...this.state.stocks];
           newStocks[index].market_price = myJson[stock.symbol].quote.latestPrice;
           newStocks[index].dividend_percentage = myJson[stock.symbol].stats.dividendYield;
@@ -74,11 +74,9 @@ class Portfolio extends Component {
     let stocks = [],
         total = 0;
 
-    this.state.stocks.map((stock) => {
-      total += getEntryValue(stock);
-    });
+    total = this.state.stocks.reduce((acc, curr) => acc + getEntryValue(curr), 0);
 
-    this.state.stocks.map((stock) => {
+    this.state.stocks.forEach((stock) => {
       stocks.push(
         <div className="stock-row">
           <div className="stock symbol">{stock.symbol}</div>
