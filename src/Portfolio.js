@@ -1,105 +1,144 @@
 import React, { Component } from 'react';
-import { getEntryValue, getMarketValue, getGainLoss, getDividend, getWeight } from './PortfolioService';
+import { FaMinusSquareO, FaLineChart } from 'react-icons/lib/fa';
+import * as PortfolioService from './PortfolioService';
 import { Constant } from './Constant';
 
 class Portfolio extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      stocks : [
-        {
+      stocks: {
+        KO: {
+          symbol: 'KO',
+          market_price: 0,
+          dividend_percentage: 0
+        },
+        MCD: {
+          symbol: 'MCD',
+          market_price: 0,
+          dividend_percentage: 0
+        },
+        T: {
+          symbol: 'T',
+          market_price: 0,
+          dividend_percentage: 0
+        },
+        CTL: {
+          symbol: 'CTL',
+          market_price: 0,
+          dividend_percentage: 0
+        }
+      },
+      purchases: {
+        purchase1: {
           symbol: 'KO',
           share: 44,
-          market_price: 0,
-          entry_price: 33.01,
-          dividend_percentage: 0
+          entry_price: 33.01
         },
-        {
+        purchase2: {
           symbol: 'MCD',
           share: 17,
-          market_price: 0,
-          entry_price: 81.02,
-          dividend_percentage: 0
+          entry_price: 81.02
         },
-        {
+        purchase3: {
           symbol: 'T',
           share: 124,
-          market_price: 0,
-          entry_price: 28.9075,
-          dividend_percentage: 0
+          entry_price: 28.9075
         },
-        {
+        purchase4: {
           symbol: 'KO',
           share: 106,
-          market_price: 0,
-          entry_price: 34.335,
-          dividend_percentage: 0
+          entry_price: 34.335
         },
-        {
+        purchase5: {
           symbol: 'CTL',
           share: 41,
-          market_price: 0,
-          entry_price: 34.61,
-          dividend_percentage: 0
+          entry_price: 34.61
         },
-      ]
+        purchaseOrder: ['purchase1', 'purchase2', 'purchase3', 'purchase4', 'purchase5']
+      }
     }
+
+    this.handleRemoveClick = this.handleRemoveClick.bind(this);
+    this.handleForecastClick = this.handleForecastClick.bind(this);
+    this.createStockTable = this.createStockTable.bind(this);
   }
 
   componentDidMount() {
     // get updated market price
     let allStocks = [];
-    this.state.stocks.forEach((stock, index) => {
-      if (allStocks.indexOf(stock.symbol) < 0) {
-        allStocks.push(stock.symbol);
-      }
-    });
+    for (let stock in this.state.stocks) {
+      allStocks.push(stock);
+    }
+
     fetch(`${Constant.IEXTRADING_BATCH_URL}?symbols=${allStocks}&types=quote,stats`)
       .then((response) => {
         return response.json();
       })
-      .then((myJson) => {
-        this.state.stocks.forEach((stock, index) => {
-          let newStocks = [...this.state.stocks];
-          newStocks[index].market_price = myJson[stock.symbol].quote.latestPrice;
-          newStocks[index].dividend_percentage = myJson[stock.symbol].stats.dividendYield;
-          this.setState({ newStocks });
-        })
-      })
+      .then((json) => {
+        let stocks = {};
+        for (let data in json) {
+          let stock = {
+            ...this.state.stocks[data],
+            market_price: json[data].quote.latestPrice,
+            dividend_percentage: json[data].stats.dividendYield
+          }
+          stocks[data] =  stock
+        }
+        this.setState({
+          ...this.state,
+          stocks
+        });
+      });
+  }
 
+  handleRemoveClick = (event) => {
+    console.log(`remove me ${event.target}`);
+  }
 
+  handleForecastClick = (event) => {
+    console.log(`show me forecast ${event.target}`);
   }
 
   createStockTable = () => {
-    let stocks = [],
-        total = 0;
+    let purchaseTable = [];
 
-    total = this.state.stocks.reduce((acc, curr) => acc + getEntryValue(curr), 0);
+    this.state.purchases.purchaseOrder.forEach((purchaseId) => {
+      let purchase = this.state.purchases[purchaseId];
+      let gainLoss = PortfolioService.getGainLoss(this.state.stocks, purchase);
 
-    this.state.stocks.forEach((stock) => {
-      stocks.push(
+      purchaseTable.push(
         <div className="stock-row">
-          <div className="stock symbol">{stock.symbol}</div>
-          <div className="stock share">{stock.share}</div>
-          <div className="stock market-price">{stock.market_price}</div>
-          <div className="stock market-value">{getMarketValue(stock)}</div>
-          <div className="stock entry-price">{stock.entry_price}</div>
-          <div className="stock entry-value">{getEntryValue(stock)}</div>
-          <div className="stock weight">{getWeight(this.state.stocks, stock, total)}</div>
-          <div className="stock gain-loss">{getGainLoss(stock)}</div>
-          <div className="stock dividend-percentage">{stock.dividend_percentage}</div>
-          <div className="stock dividend">{getDividend(stock)}</div>
+          <div className="stock action">
+            <div className="icon" onClick={this.handleRemoveClick}>
+              <FaMinusSquareO />
+            </div>
+            <div className="icon" onClick={this.handleForecastClick}>
+              <FaLineChart />
+            </div>
+          </div>
+          <div className="stock symbol">{purchase.symbol}</div>
+          <div className="stock share">{purchase.share}</div>
+          <div className="stock market-price">{PortfolioService.getMarketPrice(this.state.stocks, purchase)}</div>
+          <div className="stock market-value">{PortfolioService.getMarketValue(this.state.stocks, purchase)}</div>
+          <div className="stock entry-price">{purchase.entry_price}</div>
+          <div className="stock entry-value">{PortfolioService.getEntryValue(purchase)}</div>
+          <div className="stock weight">{PortfolioService.getWeight(this.state.purchases, purchaseId)}</div>
+          <div className={`stock gain-loss ${gainLoss > 0? 'green': 'red'}`}>{gainLoss}</div>
+          <div className="stock dividend-percentage">{PortfolioService.getDividendPercentage(this.state.stocks, purchase)}</div>
+          <div className="stock dividend">{PortfolioService.getDividend(this.state.stocks, purchase)}</div>
         </div>
       )
-    })
+    }, this);
 
-    return stocks;
+    return purchaseTable;
   }
 
   render() {
     return (
       <div className="portfolio">
         <div className="header-row">
+          <div className="header action"><h3>Action</h3></div>
           <div className="header symbol"><h3>Symbol</h3></div>
           <div className="header share"><h3>Share</h3></div>
           <div className="header market-price"><h3>Market price</h3></div>

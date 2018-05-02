@@ -1,3 +1,11 @@
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -16,6 +24,11 @@ body {
 .portfolio .header-row {
   background: rgba(0, 128, 255, 0.2);
 }
+
+.stock-row:hover > .stock {
+  background: #9E9E9E;
+}
+
 .portfolio .stock-row:nth-child(even) {
   background: white;
 }
@@ -28,4 +41,18 @@ body {
   width: 10%;
   border: solid 1px white;
   padding: 0.3em;
+}
+
+.portfolio .header-row .header.action, .portfolio .stock-row .stock.action {
+  width: 5%;
+}
+
+.portfolio .stock-row .stock.action {
+  font-size: 1.3em;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.portfolio .stock-row .stock.action .icon {
+  cursor: pointer;
 }
