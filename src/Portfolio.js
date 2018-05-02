@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FaMinusSquareO, FaLineChart } from 'react-icons/lib/fa';
+import { FaMinusSquareO, FaLineChart, FaPlusSquareO } from 'react-icons/lib/fa';
 import * as PortfolioService from './PortfolioService';
 import { Constant } from './Constant';
 
@@ -153,20 +153,38 @@ class Portfolio extends Component {
     return (
       <div className="portfolio">
         <div className="header-row">
-          <div className="header action"><h3>Action</h3></div>
-          <div className="header symbol"><h3>Symbol</h3></div>
-          <div className="header share"><h3>Share</h3></div>
-          <div className="header market-price"><h3>Market price</h3></div>
-          <div className="header market-value"><h3>Market value</h3></div>
-          <div className="header entry-price"><h3>Entry price</h3></div>
-          <div className="header entry-value"><h3>Entry value</h3></div>
-          <div className="header weight"><h3>Weight Percentage</h3></div>
-          <div className="header gain-loss"><h3>Gain/Loss</h3></div>
-          <div className="header dividend-percentage"><h3>Dividend Percentage</h3></div>
-          <div className="header dividend"><h3>Dividend</h3></div>
+          <div className="stock action"><h3>Action</h3></div>
+          <div className="stock symbol"><h3>Symbol</h3></div>
+          <div className="stock share"><h3>Share</h3></div>
+          <div className="stock market-price"><h3>Market price</h3></div>
+          <div className="stock market-value"><h3>Market value</h3></div>
+          <div className="stock entry-price"><h3>Entry price</h3></div>
+          <div className="stock entry-value"><h3>Entry value</h3></div>
+          <div className="stock weight"><h3>Weight Percentage</h3></div>
+          <div className="stock gain-loss"><h3>Gain/Loss</h3></div>
+          <div className="stock dividend-percentage"><h3>Dividend Percentage</h3></div>
+          <div className="stock dividend"><h3>Dividend</h3></div>
         </div>
 
         {this.createStockTable()}
+
+        <div className="add-row">
+          <div className="stock action">
+            <div className="icon">
+              <FaPlusSquareO />
+            </div>
+          </div>
+          <div className="stock symbol">PM</div>
+          <div className="stock share">32</div>
+          <div className="stock market-price"></div>
+          <div className="stock market-value"></div>
+          <div className="stock entry-price">88.5</div>
+          <div className="stock entry-value"></div>
+          <div className="stock weight"></div>
+          <div className="stock gain-loss"></div>
+          <div className="stock dividend-percentage"></div>
+          <div className="stock dividend"></div>
+        </div>
       </div>
     )
   }
