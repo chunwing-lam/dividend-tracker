@@ -92,12 +92,27 @@ class Portfolio extends Component {
       });
   }
 
-  handleRemoveClick = (event) => {
-    console.log(`remove me ${event.target}`);
+  handleRemoveClick = (purchaseId, event) => {
+    let answer = window.confirm('Are you sure you want to remove?');
+    if (answer) {
+      let newPurchases = {
+        ...this.state.purchases
+      };
+      delete newPurchases[purchaseId];
+
+      this.setState({
+        ...this.state,
+        purchases: {
+          ...newPurchases,
+          purchaseOrder: this.state.purchases.purchaseOrder.filter((purchase) => purchase !== purchaseId)
+        }
+      })
+    }
   }
 
-  handleForecastClick = (event) => {
-    console.log(`show me forecast ${event.target}`);
+  handleForecastClick = (purchaseId, event) => {
+    console.log(purchaseId);
+    console.log(`show me forecast ${purchaseId} ${event.target}`);
   }
 
   createStockTable = () => {
@@ -110,10 +125,10 @@ class Portfolio extends Component {
       purchaseTable.push(
         <div className="stock-row">
           <div className="stock action">
-            <div className="icon" onClick={this.handleRemoveClick}>
+            <div className="icon" onClick={(event) => this.handleRemoveClick(purchaseId, event)}>
               <FaMinusSquareO />
             </div>
-            <div className="icon" onClick={this.handleForecastClick}>
+            <div className="icon" onClick={(event) => this.handleForecastClick(purchaseId, event)}>
               <FaLineChart />
             </div>
           </div>
