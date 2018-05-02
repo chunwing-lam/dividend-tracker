@@ -123,7 +123,7 @@ class Portfolio extends Component {
           <div className="stock market-value">{PortfolioService.getMarketValue(this.state.stocks, purchase)}</div>
           <div className="stock entry-price">{purchase.entry_price}</div>
           <div className="stock entry-value">{PortfolioService.getEntryValue(purchase)}</div>
-          <div className="stock weight">{PortfolioService.getWeight(this.state.purchases, purchaseId)}</div>
+          <div className="stock weight">{PortfolioService.getWeight(this.state.purchases, purchase)}</div>
           <div className={`stock gain-loss ${gainLoss > 0? 'green': 'red'}`}>{gainLoss}</div>
           <div className="stock dividend-percentage">{PortfolioService.getDividendPercentage(this.state.stocks, purchase)}</div>
           <div className="stock dividend">{PortfolioService.getDividend(this.state.stocks, purchase)}</div>

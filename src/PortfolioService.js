@@ -1,32 +1,31 @@
 export const getMarketPrice = (stocks, purchase) => stocks[purchase.symbol].market_price;
 
-export const getMarketValue = (stock) => stock.market_price * stock.share;
+export const getMarketValue = (stocks, purchase) => {
+  if (purchase !== undefined) {
+    return getMarketPrice(stocks, purchase) * purchase.share;
+  }
+  return 0;
+}
 
 export const getDividendPercentage = (stocks, purchase) => stocks[purchase.symbol].dividend_percentage;
 
 export const getEntryValue = (purchase) => purchase.entry_price * purchase.share;
 
-export const getGainLoss = (stock) => getMarketValue(stock) - getEntryValue(stock);
+export const getGainLoss = (stocks, purchase) => getMarketValue(stocks, purchase) - getEntryValue(purchase);
 
 export const getDividend = (stocks, purchase) =>
   getMarketValue(stocks, purchase) * getDividendPercentage(stocks, purchase) / 100;
 
-export const getWeight = (purchases, purchaseId) => {
+export const getWeight = (purchases, purchase) => {
   const total = getTotal(purchases);
-  let selectedStockTotal = 0;
-
-  for (let purchase in purchases) {
-    if (purchase.symbol === purchases[purchaseId].symbol) {
-      selectedStockTotal += getEntryValue(purchase);
-    }
-  }
+  let reducer = (acc, curr) => acc + getEntryValue(purchases[curr]);
+  let selectedStockTotal = purchases.purchaseOrder
+                             .filter((id) => purchases[id].symbol === purchase.symbol)
+                             .reduce(reducer, 0);
   return selectedStockTotal / total * 100;
 }
 
 export const getTotal = (purchases) => {
-  let total = 0;
-  for (let purchase in purchases) {
-    total += getEntryValue(purchase);
-  }
-  return total;
+  let reducer = (acc, curr) => acc + getEntryValue(purchases[curr]);
+  return purchases.purchaseOrder.reduce(reducer, 0);
 }
