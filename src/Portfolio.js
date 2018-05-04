@@ -61,16 +61,19 @@ class Portfolio extends Component {
 
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.handleForecastClick = this.handleForecastClick.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     this.createStockTable = this.createStockTable.bind(this);
+    this.fetchStats = this.fetchStats.bind(this);
   }
 
-  componentDidMount() {
-    // get updated market price
-    let allStocks = [];
-    for (let stock in this.state.stocks) {
-      allStocks.push(stock);
+  componentDidUpdate(prevProps, prevState) {
+    if (Object.keys(this.state.stocks).length > Object.keys(prevState.stocks).length) {
+      this.fetchStats();
     }
+  }
 
+  fetchStats() {
+    let allStocks = Object.keys(this.state.stocks);
     fetch(`${Constant.IEXTRADING_BATCH_URL}?symbols=${allStocks}&types=quote,stats`)
       .then((response) => {
         return response.json();
@@ -90,6 +93,10 @@ class Portfolio extends Component {
           stocks
         });
       });
+  }
+
+  componentDidMount() {
+    this.fetchStats();
   }
 
   handleRemoveClick = (purchaseId, event) => {
@@ -113,6 +120,35 @@ class Portfolio extends Component {
   handleForecastClick = (purchaseId, event) => {
     console.log(purchaseId);
     console.log(`show me forecast ${purchaseId} ${event.target}`);
+  }
+
+  handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    let nextIndex = this.state.purchases.purchaseOrder.length + 1;
+
+    let _stock = data.get('stock');
+
+    this.setState({
+      ...this.state,
+      stocks: {
+        ...this.state.stocks,
+        [_stock]: {
+          symbol: _stock,
+          market_price: 0,
+          dividend_percentage: 0
+        }
+      },
+      purchases: {
+        ...this.state.purchases,
+        ['purchase'+nextIndex]: {
+          symbol: data.get('stock'),
+          share: Number(data.get('share')),
+          entry_price: Number(data.get('entry_price'))
+        },
+        purchaseOrder: this.state.purchases.purchaseOrder.concat('purchase'+nextIndex)
+      }
+    });
   }
 
   createStockTable = () => {
@@ -168,23 +204,33 @@ class Portfolio extends Component {
 
         {this.createStockTable()}
 
-        <div className="add-row">
-          <div className="stock action">
-            <div className="icon">
-              <FaPlusSquareO />
+        <form onSubmit={this.handleSubmit}>
+          <div className="add-row">
+            <div className="stock action">
+              <div className="icon">
+                <button className="submit icon">
+                  <FaPlusSquareO />
+                </button>
+              </div>
             </div>
+            <div className="stock symbol">
+              <input type="text" name="stock" />
+            </div>
+            <div className="stock share">
+              <input type="text" name="share" />
+            </div>
+            <div className="stock market-price"></div>
+            <div className="stock market-value"></div>
+            <div className="stock entry-price">
+              <input type="text" name="entry_price" />
+            </div>
+            <div className="stock entry-value"></div>
+            <div className="stock weight"></div>
+            <div className="stock gain-loss"></div>
+            <div className="stock dividend-percentage"></div>
+            <div className="stock dividend"></div>
           </div>
-          <div className="stock symbol">PM</div>
-          <div className="stock share">32</div>
-          <div className="stock market-price"></div>
-          <div className="stock market-value"></div>
-          <div className="stock entry-price">88.5</div>
-          <div className="stock entry-value"></div>
-          <div className="stock weight"></div>
-          <div className="stock gain-loss"></div>
-          <div className="stock dividend-percentage"></div>
-          <div className="stock dividend"></div>
-        </div>
+        </form>
       </div>
     )
   }

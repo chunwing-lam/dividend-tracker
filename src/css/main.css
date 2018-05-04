@@ -56,3 +56,12 @@ body {
 .icon {
   cursor: pointer;
 }
+
+.add-row input[type="text"] {
+  width: 50%;
+}
+
+button.submit {
+  font-size: 1em;
+  border: 0;
+}
