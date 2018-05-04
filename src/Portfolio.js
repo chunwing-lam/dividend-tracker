@@ -135,8 +135,8 @@ class Portfolio extends Component {
         ...this.state.stocks,
         [_stock]: {
           symbol: _stock,
-          market_price: 0,
-          dividend_percentage: 0
+          market_price: this.state.stocks[_stock] !== undefined? this.state.stocks[_stock].market_price : 0,
+          dividend_percentage: this.state.stocks[_stock] !== undefined? this.state.stocks[_stock].dividend_percentage : 0
         }
       },
       purchases: {
