@@ -125,7 +125,13 @@ class Portfolio extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.target);
-    let nextIndex = this.state.purchases.purchaseOrder.length + 1;
+
+    // use the last purchase order number and plus one
+    let nextIndex = 1;
+    if (this.state.purchases.purchaseOrder.length > 0) {
+      let lastOrderName = this.state.purchases.purchaseOrder[this.state.purchases.purchaseOrder.length - 1];
+      nextIndex = Number(lastOrderName.substring(lastOrderName.length - 1)) + 1;
+    }
 
     let _stock = data.get('stock');
 
