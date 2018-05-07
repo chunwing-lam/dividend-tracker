@@ -16,7 +16,7 @@ class AdderRow extends Component {
     let nextIndex = 1;
     if (this.props.stocks.purchases.purchaseOrder.length > 0) {
       let lastOrderName = this.props.stocks.purchases.purchaseOrder[this.props.stocks.purchases.purchaseOrder.length - 1];
-      nextIndex = Number(lastOrderName.substring(lastOrderName.length - 1)) + 1;
+      nextIndex = Number(lastOrderName.substring('purchase'.length)) + 1;
     }
 
     let _stock = data.get('stock');

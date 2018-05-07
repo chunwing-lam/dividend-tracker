@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { FaMinusSquareO, FaLineChart } from 'react-icons/lib/fa';
-import * as PortfolioService from './PortfolioService';
 import { Constant } from './Constant';
 import HeaderRow from './modules/Table/HeaderRow';
 import AdderRow from './modules/Table/AdderRow';
+import PurchasesRow from './modules/Table/PurchasesRow';
 
 class Portfolio extends Component {
   constructor(props) {
@@ -63,7 +62,6 @@ class Portfolio extends Component {
 
     this.handleRemoveClick = this.handleRemoveClick.bind(this);
     this.handleForecastClick = this.handleForecastClick.bind(this);
-    this.createStockTable = this.createStockTable.bind(this);
     this.fetchStats = this.fetchStats.bind(this);
     this.handleStocksChange = this.handleStocksChange.bind(this);
   }
@@ -128,47 +126,11 @@ class Portfolio extends Component {
     console.log(`show me forecast ${purchaseId} ${event.target}`);
   }
 
-  createStockTable = () => {
-    let purchaseTable = [];
-
-    this.state.purchases.purchaseOrder.forEach((purchaseId) => {
-      let purchase = this.state.purchases[purchaseId];
-      let gainLoss = PortfolioService.getGainLoss(this.state.stocks, purchase);
-
-      purchaseTable.push(
-        <div className="stock-row">
-          <div className="stock action">
-            <div className="icon" onClick={(event) => this.handleRemoveClick(purchaseId, event)}>
-              <FaMinusSquareO />
-            </div>
-            <div className="icon" onClick={(event) => this.handleForecastClick(purchaseId, event)}>
-              <FaLineChart />
-            </div>
-          </div>
-          <div className="stock symbol">{purchase.symbol}</div>
-          <div className="stock share">{purchase.share}</div>
-          <div className="stock market-price">{PortfolioService.getMarketPrice(this.state.stocks, purchase)}</div>
-          <div className="stock market-value">{PortfolioService.getMarketValue(this.state.stocks, purchase)}</div>
-          <div className="stock entry-price">{purchase.entry_price}</div>
-          <div className="stock entry-value">{PortfolioService.getEntryValue(purchase)}</div>
-          <div className="stock weight">{PortfolioService.getWeight(this.state.purchases, purchase)}</div>
-          <div className={`stock gain-loss ${gainLoss > 0? 'green': 'red'}`}>{gainLoss}</div>
-          <div className="stock dividend-percentage">{PortfolioService.getDividendPercentage(this.state.stocks, purchase)}</div>
-          <div className="stock dividend">{PortfolioService.getDividend(this.state.stocks, purchase)}</div>
-        </div>
-      )
-    }, this);
-
-    return purchaseTable;
-  }
-
   render() {
     return (
       <div className="portfolio">
         <HeaderRow />
-
-        {this.createStockTable()}
-
+        <PurchasesRow stocks={this.state} />
         <AdderRow stocks={this.state} onStocksChange={this.handleStocksChange} />
       </div>
     )
