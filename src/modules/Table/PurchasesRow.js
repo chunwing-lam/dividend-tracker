@@ -7,6 +7,31 @@ class PurchasesRow extends Component {
     super(props);
 
     this.createStockTable = this.createStockTable.bind(this);
+    this.handleRemoveClick = this.handleRemoveClick.bind(this);
+    this.handleForecastClick = this.handleForecastClick.bind(this);
+  }
+
+  handleRemoveClick = (purchaseId, event) => {
+    let answer = window.confirm('Are you sure you want to remove?');
+    if (answer) {
+      let newPurchases = {
+        ...this.props.stocks.purchases
+      };
+      delete newPurchases[purchaseId];
+
+      this.props.onStocksChange({
+        ...this.props.stocks,
+        purchases: {
+          ...newPurchases,
+          purchaseOrder: this.props.stocks.purchases.purchaseOrder.filter((purchase) => purchase !== purchaseId)
+        }
+      })
+    }
+  }
+
+  handleForecastClick = (purchaseId, event) => {
+    console.log(purchaseId);
+    console.log(`show me forecast ${purchaseId} ${event.target}`);
   }
 
   createStockTable = () => {

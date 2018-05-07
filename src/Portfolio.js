@@ -60,8 +60,6 @@ class Portfolio extends Component {
       }
     }
 
-    this.handleRemoveClick = this.handleRemoveClick.bind(this);
-    this.handleForecastClick = this.handleForecastClick.bind(this);
     this.fetchStats = this.fetchStats.bind(this);
     this.handleStocksChange = this.handleStocksChange.bind(this);
   }
@@ -103,34 +101,11 @@ class Portfolio extends Component {
     this.fetchStats();
   }
 
-  handleRemoveClick = (purchaseId, event) => {
-    let answer = window.confirm('Are you sure you want to remove?');
-    if (answer) {
-      let newPurchases = {
-        ...this.state.purchases
-      };
-      delete newPurchases[purchaseId];
-
-      this.setState({
-        ...this.state,
-        purchases: {
-          ...newPurchases,
-          purchaseOrder: this.state.purchases.purchaseOrder.filter((purchase) => purchase !== purchaseId)
-        }
-      })
-    }
-  }
-
-  handleForecastClick = (purchaseId, event) => {
-    console.log(purchaseId);
-    console.log(`show me forecast ${purchaseId} ${event.target}`);
-  }
-
   render() {
     return (
       <div className="portfolio">
         <HeaderRow />
-        <PurchasesRow stocks={this.state} />
+        <PurchasesRow stocks={this.state} onStocksChange={this.handleStocksChange} />
         <AdderRow stocks={this.state} onStocksChange={this.handleStocksChange} />
       </div>
     )
