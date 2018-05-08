@@ -3,6 +3,7 @@ import { Constant } from './Constant';
 import HeaderRow from './modules/Table/HeaderRow';
 import AdderRow from './modules/Table/AdderRow';
 import PurchasesRow from './modules/Table/PurchasesRow';
+import * as PortfolioService from './PortfolioService';
 
 class Portfolio extends Component {
   constructor(props) {
@@ -12,22 +13,26 @@ class Portfolio extends Component {
         KO: {
           symbol: 'KO',
           market_price: 0,
-          dividend_percentage: 0
+          dividend_percentage: 0,
+          growth: 0
         },
         MCD: {
           symbol: 'MCD',
           market_price: 0,
-          dividend_percentage: 0
+          dividend_percentage: 0,
+          growth: 0
         },
         T: {
           symbol: 'T',
           market_price: 0,
-          dividend_percentage: 0
+          dividend_percentage: 0,
+          growth: 0
         },
         CTL: {
           symbol: 'CTL',
           market_price: 0,
-          dividend_percentage: 0
+          dividend_percentage: 0,
+          growth: 0
         }
       },
       purchases: {
@@ -76,7 +81,7 @@ class Portfolio extends Component {
 
   fetchStats() {
     let allStocks = Object.keys(this.state.stocks);
-    fetch(`${Constant.IEXTRADING_BATCH_URL}?symbols=${allStocks}&types=quote,stats`)
+    fetch(`${Constant.IEXTRADING_BATCH_URL}?symbols=${allStocks}&types=quote,stats,dividends&range=5y`)
       .then((response) => {
         return response.json();
       })
@@ -86,7 +91,8 @@ class Portfolio extends Component {
           let stock = {
             ...this.state.stocks[data],
             market_price: json[data].quote.latestPrice,
-            dividend_percentage: json[data].stats.dividendYield
+            dividend_percentage: json[data].stats.dividendYield,
+            growth: PortfolioService.getDividendGrowth(json[data].dividends)
           }
           stocks[data] =  stock
         }

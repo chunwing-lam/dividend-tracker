@@ -29,3 +29,19 @@ export const getTotal = (purchases) => {
   let reducer = (acc, curr) => acc + getEntryValue(purchases[curr]);
   return purchases.purchaseOrder.reduce(reducer, 0);
 }
+
+export const getDividendGrowth = (dividends) => {
+  dividends.reverse();
+  let diff = [];
+  // get the diff for dividends
+  for (let i = 1; i < dividends.length; i++) {
+    diff.push(parseFloat((dividends[i].amount - dividends[i-1].amount).toFixed(4)));
+  }
+
+  let percentage = [];
+  for (let i = 0; i < dividends.length - 1; i++) {
+    percentage.push(parseFloat((diff[i] / dividends[i].amount).toFixed(4)));
+  }
+
+  return percentage.reduce((acc, curr) => acc + curr, 0) / percentage.length;
+}
