@@ -28,7 +28,8 @@ class AdderRow extends Component {
         [_stock]: {
           symbol: _stock,
           market_price: this.props.stocks.stocks[_stock] !== undefined? this.props.stocks.stocks[_stock].market_price : 0,
-          dividend_percentage: this.props.stocks.stocks[_stock] !== undefined? this.props.stocks.stocks[_stock].dividend_percentage : 0
+          dividend_percentage: this.props.stocks.stocks[_stock] !== undefined? this.props.stocks.stocks[_stock].dividend_percentage : 0,
+          growth: this.props.stocks.stocks[_stock] !== undefined? this.props.stocks.stocks[_stock].growth : 0,
         }
       },
       purchases: {
