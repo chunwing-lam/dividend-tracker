@@ -10,31 +10,46 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.portfolio {
+.portfolio, .forecast-table {
   display: flex;
   flex-direction: column;
   text-align: center;
   font-size: 0.7em;
 }
 
-.portfolio .header-row, .portfolio .stock-row, .portfolio .add-row {
+.forecast-table {
+  width: 34%;
+  position: absolute;
+  top: 36%;
+  left: 9%;
+  box-shadow: 1px 0px 9px 5px grey;
+}
+
+.portfolio .header-row,
+.portfolio .stock-row,
+.portfolio .add-row,
+.forecast-table .forecast-header-row,
+.forecast-table .forecast-row {
   display: flex;
 }
 
-.portfolio .header-row {
-  background: rgba(0, 128, 255, 0.2);
+.portfolio .header-row, .forecast-table .forecast-header-row {
+  background: rgb(187, 221, 255);
 }
 
-.stock-row:hover > .stock {
+.stock-row:hover > .stock,
+.forecast-row:hover > .forecast {
   background: #9E9E9E;
 }
 
-.portfolio .stock-row:nth-child(even) {
+.portfolio .stock-row:nth-child(even),
+.forecast-table .forecast-row:nth-child(even)  {
   background: white;
 }
 
-.portfolio .stock-row:nth-child(odd) {
-  background: rgba(112, 128, 144, 0.2);
+.portfolio .stock-row:nth-child(odd),
+.forecast-table .forecast-row:nth-child(odd) {
+  background: rgb(218, 222, 226);
 }
 
 .stock {
@@ -45,6 +60,16 @@ body {
 
 .stock.action {
   width: 5%;
+}
+
+.forecast {
+  width: 45%;
+  border: solid 1px white;
+  padding: 0.3em;
+}
+
+.forecast.year {
+  width: 10%;
 }
 
 .portfolio .stock-row .stock.action, .portfolio .add-row .stock.action {

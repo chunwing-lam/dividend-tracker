@@ -3,12 +3,14 @@ import { Constant } from './Constant';
 import HeaderRow from './modules/Table/HeaderRow';
 import AdderRow from './modules/Table/AdderRow';
 import PurchasesRow from './modules/Table/PurchasesRow';
+import ForecastTable from './modules/Table/ForecastTable';
 import * as PortfolioService from './PortfolioService';
 
 class Portfolio extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      forecastTableIsOpen: false,
       stocks: {
         KO: {
           symbol: 'KO',
@@ -66,11 +68,21 @@ class Portfolio extends Component {
     }
 
     this.fetchStats = this.fetchStats.bind(this);
-    this.handleStocksChange = this.handleStocksChange.bind(this);
+    this.handleStateChange = this.handleStateChange.bind(this);
+    this.handleForecastTableChange = this.handleForecastTableChange.bind(this);
   }
 
-  handleStocksChange(newStocks) {
+  handleStateChange(newStocks) {
     this.setState({ ...newStocks });
+  }
+
+  handleForecastTableChange() {
+    this.setState(prevState => {
+      return {
+        ...this.state.stocks,
+        forecastTableIsOpen: !prevState.forecastTableIsOpen
+      }
+    })
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -109,10 +121,13 @@ class Portfolio extends Component {
 
   render() {
     return (
-      <div className="portfolio">
-        <HeaderRow />
-        <PurchasesRow stocks={this.state} onStocksChange={this.handleStocksChange} />
-        <AdderRow stocks={this.state} onStocksChange={this.handleStocksChange} />
+      <div>
+        <div className="portfolio">
+          <HeaderRow />
+          <PurchasesRow stocks={this.state} onStateChange={this.handleStateChange} onForecastTableChange={this.handleForecastTableChange} />
+          <AdderRow stocks={this.state} onStateChange={this.handleStateChange} />
+        </div>
+        { this.state.forecastTableIsOpen? <ForecastTable /> : null }
       </div>
     )
   }

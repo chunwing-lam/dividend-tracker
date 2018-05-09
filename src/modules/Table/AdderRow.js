@@ -21,7 +21,7 @@ class AdderRow extends Component {
 
     let _stock = data.get('stock');
 
-    this.props.onStocksChange({
+    this.props.onStateChange({
       ...this.props.stocks,
       stocks: {
         ...this.props.stocks.stocks,

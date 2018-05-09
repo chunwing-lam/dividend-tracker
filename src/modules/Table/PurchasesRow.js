@@ -19,7 +19,7 @@ class PurchasesRow extends Component {
       };
       delete newPurchases[purchaseId];
 
-      this.props.onStocksChange({
+      this.props.onStateChange({
         ...this.props.stocks,
         purchases: {
           ...newPurchases,
@@ -30,6 +30,7 @@ class PurchasesRow extends Component {
   }
 
   handleForecastClick = (purchaseId, event) => {
+    this.props.onForecastTableChange();
     console.log(purchaseId);
     console.log(`show me forecast ${purchaseId} ${event.target}`);
   }
