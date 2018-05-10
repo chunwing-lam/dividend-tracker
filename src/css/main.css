@@ -19,9 +19,9 @@ body {
 
 .forecast-table {
   width: 34%;
-  position: absolute;
-  top: 36%;
-  left: 9%;
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
   box-shadow: 1px 0px 9px 5px grey;
 }
 
@@ -89,4 +89,13 @@ body {
 button.submit {
   font-size: 1em;
   border: 0;
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.29);
 }

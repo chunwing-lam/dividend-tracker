@@ -127,7 +127,7 @@ class Portfolio extends Component {
           <PurchasesRow stocks={this.state} onStateChange={this.handleStateChange} onForecastTableChange={this.handleForecastTableChange} />
           <AdderRow stocks={this.state} onStateChange={this.handleStateChange} />
         </div>
-        { this.state.forecastTableIsOpen? <ForecastTable /> : null }
+        { this.state.forecastTableIsOpen? <ForecastTable onForecastTableChange={this.handleForecastTableChange} /> : null }
       </div>
     )
   }
