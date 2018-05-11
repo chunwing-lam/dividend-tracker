@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { FaMinusSquareO, FaLineChart } from 'react-icons/lib/fa';
 import * as PortfolioService from '../../PortfolioService';
+import { Constant } from '../../Constant';
 
 class PurchasesRow extends Component {
   constructor(props) {
@@ -31,8 +32,8 @@ class PurchasesRow extends Component {
 
   handleForecastClick = (purchaseId, event) => {
     this.props.onForecastTableChange();
-    console.log(purchaseId);
-    console.log(`show me forecast ${purchaseId} ${event.target}`);
+    let foo = PortfolioService.getEstimateGrowth(this.props.stocks, this.props.stocks.purchases[purchaseId], Constant.ESTIMATE_YEARS);
+    console.log(foo);
   }
 
   createStockTable = () => {

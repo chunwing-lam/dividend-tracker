@@ -48,3 +48,7 @@ export const getDividendGrowth = (dividends) => {
 
   return percentage.reduce((acc, curr) => acc + curr, 0) / percentage.length;
 }
+
+export const getEstimateGrowth = (stocks, purchase, years) => {
+  return new Array(years);
+}
