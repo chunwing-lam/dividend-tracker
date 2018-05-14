@@ -9,6 +9,8 @@ export const getMarketValue = (stocks, purchase) => {
 
 export const getDividendPercentage = (stocks, purchase) => stocks[purchase.symbol].dividend_percentage;
 
+export const getGrowth = (stocks, purchase) => stocks[purchase.symbol].growth;
+
 export const getEntryValue = (purchase) => purchase.entry_price * purchase.share;
 
 export const getGainLoss = (stocks, purchase) => getMarketValue(stocks, purchase) - getEntryValue(purchase);
@@ -50,5 +52,18 @@ export const getDividendGrowth = (dividends) => {
 }
 
 export const getEstimateGrowth = (stocks, purchase, years) => {
-  return new Array(years);
+  let estimate = [];
+  let dividendPercentage = getDividendPercentage(stocks, purchase);
+  let forecast = getMarketValue(stocks, purchase) * dividendPercentage / 100;
+  for (let year = 1; year <= years; year++) {
+    estimate.push({
+      'year': year,
+      'payable': dividendPercentage,
+      'forecast': forecast
+    });
+    dividendPercentage = dividendPercentage * (1 + getGrowth(stocks, purchase));
+    forecast = forecast + (getMarketValue(stocks, purchase) * dividendPercentage / 100)
+  }
+
+  return estimate;
 }

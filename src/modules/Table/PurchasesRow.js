@@ -31,9 +31,8 @@ class PurchasesRow extends Component {
   }
 
   handleForecastClick = (purchaseId, event) => {
-    this.props.onForecastTableChange();
-    let foo = PortfolioService.getEstimateGrowth(this.props.stocks, this.props.stocks.purchases[purchaseId], Constant.ESTIMATE_YEARS);
-    console.log(foo);
+    let estimateGrowth = PortfolioService.getEstimateGrowth(this.props.stocks.stocks, this.props.stocks.purchases[purchaseId], Constant.ESTIMATE_YEARS);
+    this.props.onForecastTableChange(estimateGrowth);
   }
 
   createStockTable = () => {

@@ -5,10 +5,27 @@ class ForecastTable extends Component {
     super(props);
 
     this.handleForecastClick = this.handleForecastClick.bind(this);
+    this.createForecastTable = this.createForecastTable.bind(this);
   }
 
   handleForecastClick() {
     this.props.onForecastTableChange();
+  }
+
+  createForecastTable = () => {
+    let forecastTable = [];
+
+    this.props.forecast.forEach((forecast) => {
+      forecastTable.push(
+        <div className="forecast-row">
+          <div className="forecast year">{forecast.year}</div>
+          <div className="forecast payable">{forecast.payable}</div>
+          <div className="forecast estimate">{forecast.forecast}</div>
+        </div>
+      )
+    })
+
+    return forecastTable;
   }
 
   render() {
@@ -22,35 +39,8 @@ class ForecastTable extends Component {
             <div className="forecast estimate"><h3>Estimate Dividend Forecast</h3></div>
           </div>
 
-          <div className="forecast-row">
-            <div className="forecast year">1</div>
-            <div className="forecast payable">2</div>
-            <div className="forecast estimate">3</div>
-          </div>
+          {this.createForecastTable()}
 
-          <div className="forecast-row">
-            <div className="forecast year">1</div>
-            <div className="forecast payable">2</div>
-            <div className="forecast estimate">3</div>
-          </div>
-
-          <div className="forecast-row">
-            <div className="forecast year">1</div>
-            <div className="forecast payable">2</div>
-            <div className="forecast estimate">3</div>
-          </div>
-
-          <div className="forecast-row">
-            <div className="forecast year">1</div>
-            <div className="forecast payable">2</div>
-            <div className="forecast estimate">3</div>
-          </div>
-
-          <div className="forecast-row">
-            <div className="forecast year">1</div>
-            <div className="forecast payable">2</div>
-            <div className="forecast estimate">3</div>
-          </div>
         </div>
       </div>
     )

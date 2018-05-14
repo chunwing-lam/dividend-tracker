@@ -11,6 +11,7 @@ class Portfolio extends Component {
     super(props);
     this.state = {
       forecastTableIsOpen: false,
+      forecast: [],
       stocks: {
         KO: {
           symbol: 'KO',
@@ -76,11 +77,12 @@ class Portfolio extends Component {
     this.setState({ ...newStocks });
   }
 
-  handleForecastTableChange() {
+  handleForecastTableChange(estimateGrowth) {
     this.setState(prevState => {
       return {
         ...this.state.stocks,
-        forecastTableIsOpen: !prevState.forecastTableIsOpen
+        forecastTableIsOpen: !prevState.forecastTableIsOpen,
+        forecast: estimateGrowth
       }
     })
   }
@@ -127,7 +129,7 @@ class Portfolio extends Component {
           <PurchasesRow stocks={this.state} onStateChange={this.handleStateChange} onForecastTableChange={this.handleForecastTableChange} />
           <AdderRow stocks={this.state} onStateChange={this.handleStateChange} />
         </div>
-        { this.state.forecastTableIsOpen? <ForecastTable onForecastTableChange={this.handleForecastTableChange} /> : null }
+        { this.state.forecastTableIsOpen? <ForecastTable forecast={this.state.forecast} onForecastTableChange={this.handleForecastTableChange} /> : null }
       </div>
     )
   }
