@@ -20,6 +20,7 @@ body {
 .forecast-table {
   width: 34%;
   position: fixed;
+  top: 15%;
   left: 50%;
   transform: translateX(-50%);
   box-shadow: 1px 0px 9px 5px grey;
