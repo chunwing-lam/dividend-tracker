@@ -72,7 +72,7 @@ class PurchasesRow extends Component {
   render() {
     return (
       <div>
-        {this.createStockTable()}
+        {Object.keys(this.props.stocks).length > 0? this.createStockTable() : null}
       </div>
     )
   }
