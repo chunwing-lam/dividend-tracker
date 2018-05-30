@@ -43,7 +43,7 @@ class PurchasesRow extends Component {
       let gainLoss = PortfolioService.getGainLoss(this.props.stocks.stocks, purchase);
 
       purchaseTable.push(
-        <div className="stock-row">
+        <div className="stock-row" key={purchase.key}>
           <div className="stock action">
             <div className="icon" onClick={(event) => this.handleRemoveClick(purchaseId, event)}>
               <FaMinusSquareO />

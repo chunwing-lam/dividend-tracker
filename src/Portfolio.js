@@ -88,7 +88,8 @@ class Portfolio extends Component {
           let purchase = {
             symbol: p.symbol,
             share: p.share,
-            entry_price: p.entryPrice
+            entry_price: p.entryPrice,
+            key: p.id
           }
           purchases['purchase' + index] = purchase;
         });
