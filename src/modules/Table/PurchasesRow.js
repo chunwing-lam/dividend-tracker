@@ -26,6 +26,12 @@ class PurchasesRow extends Component {
           ...newPurchases,
           purchaseOrder: this.props.stocks.purchases.purchaseOrder.filter((purchase) => purchase !== purchaseId)
         }
+      });
+
+      fetch(`${Constant.PORTFOLIO_ENDPOINT}${this.props.stocks.purchases[purchaseId].key}`, {
+        method: 'DELETE'
+      }).then((response) => {
+        return response.json();
       })
     }
   }
