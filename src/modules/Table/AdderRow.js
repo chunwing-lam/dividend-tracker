@@ -26,27 +26,41 @@ class AdderRow extends Component {
     fetch(Constant.IEXTRADING_PRICE_URL(_stock))
       .then((response) => {
         if (response.status === 200) {
-          this.props.onStateChange({
-            ...this.props.stocks,
-            stocks: {
-              ...this.props.stocks.stocks,
-              [_stock]: {
-                symbol: _stock,
-                market_price: this.props.stocks.stocks[_stock] !== undefined? this.props.stocks.stocks[_stock].market_price : 0,
-                dividend_percentage: this.props.stocks.stocks[_stock] !== undefined? this.props.stocks.stocks[_stock].dividend_percentage : 0,
-                growth: this.props.stocks.stocks[_stock] !== undefined? this.props.stocks.stocks[_stock].growth : 0,
-              }
-            },
-            purchases: {
-              ...this.props.stocks.purchases,
-              ['purchase'+nextIndex]: {
-                symbol: _stock,
-                share: Number(data.get('share')),
-                entry_price: Number(data.get('entry_price'))
+          fetch(`${Constant.PORTFOLIO_ENDPOINT}`, {
+            method: 'POST',
+            body: JSON.stringify({
+              symbol: _stock,
+              share: Number(data.get('share')),
+              entryPrice: Number(data.get('entry_price'))
+            })
+          })
+          .then((response) => {
+            return response.json();
+          })
+          .then((json) => {
+            this.props.onStateChange({
+              ...this.props.stocks,
+              stocks: {
+                ...this.props.stocks.stocks,
+                [_stock]: {
+                  symbol: _stock,
+                  market_price: this.props.stocks.stocks[_stock] !== undefined? this.props.stocks.stocks[_stock].market_price : 0,
+                  dividend_percentage: this.props.stocks.stocks[_stock] !== undefined? this.props.stocks.stocks[_stock].dividend_percentage : 0,
+                  growth: this.props.stocks.stocks[_stock] !== undefined? this.props.stocks.stocks[_stock].growth : 0,
+                }
               },
-              purchaseOrder: this.props.stocks.purchases.purchaseOrder.concat('purchase'+nextIndex)
-            }
-          });
+              purchases: {
+                ...this.props.stocks.purchases,
+                ['purchase'+nextIndex]: {
+                  symbol: _stock,
+                  share: Number(data.get('share')),
+                  entry_price: Number(data.get('entry_price')),
+                  key: json.id
+                },
+                purchaseOrder: this.props.stocks.purchases.purchaseOrder.concat('purchase'+nextIndex)
+              }
+            });
+          })
         }
       });
   }

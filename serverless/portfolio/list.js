@@ -19,7 +19,7 @@ module.exports.list = (event, context, callback) => {
           'Content-Type': 'text/plain',
           'Access-Control-Allow-Origin': '*'
         },
-        body: 'Couldn\'t fetch the todos.',
+        body: 'Couldn\'t fetch the purchases.',
       });
       return;
     }
@@ -28,7 +28,7 @@ module.exports.list = (event, context, callback) => {
     const response = {
       statusCode: 200,
       headers: {
-        'Access-Control-Allow-Origin': '*' 
+        'Access-Control-Allow-Origin': '*'
       },
       body: JSON.stringify(result.Items),
     };
