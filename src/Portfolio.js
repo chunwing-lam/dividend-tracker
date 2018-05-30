@@ -9,7 +9,14 @@ import * as PortfolioService from './PortfolioService';
 class Portfolio extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      forecastTableIsOpen: false,
+      forecast: [],
+      stocks: {},
+      purchases: {
+        purchaseOrder: []
+      }
+    };
 
     this.fetchStats = this.fetchStats.bind(this);
     this.handleStateChange = this.handleStateChange.bind(this);
@@ -33,50 +40,60 @@ class Portfolio extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.stocks !== undefined) {
       if (Object.keys(this.state.stocks).length > Object.keys(prevState.stocks).length) {
-        this.fetchStats();
+        this.fetchStats(this.state.purchases);
       }
     }
   }
 
-  fetchStats() {
-    if (this.state.stocks !== undefined) {
-      let allStocks = Object.keys(this.state.stocks);
-      if (allStocks.length > 0) {
-        fetch(`${Constant.IEXTRADING_BATCH_URL}?symbols=${allStocks}&types=quote,stats,dividends&range=5y`)
-          .then((response) => {
-            return response.json();
-          })
-          .then((json) => {
-            let stocks = {};
-            for (let data in json) {
-              let stock = {
-                ...this.state.stocks[data],
-                market_price: json[data].quote.latestPrice,
-                dividend_percentage: json[data].stats.dividendYield,
-                growth: PortfolioService.getDividendGrowth(json[data].dividends)
-              }
-              stocks[data] =  stock
-            }
-            this.setState({
-              ...this.state,
-              stocks
-            });
-          });
-      }
-    }
+  fetchStats(purchases) {
+    let allStocks = Object.entries(purchases)
+      .filter((purchase) => purchase[0].indexOf('Order') === -1)
+      .map((purchase) => purchase[1].symbol)
+      .filter((purchase, index, purchases) => purchases.indexOf(purchase) === index)
+
+    fetch(`${Constant.IEXTRADING_BATCH_URL}?symbols=${allStocks}&types=quote,stats,dividends&range=5y`)
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        let stocks = {};
+        for (let data in json) {
+          let stock = {
+            ...this.state.stocks[data],
+            market_price: json[data].quote.latestPrice,
+            dividend_percentage: json[data].stats.dividendYield,
+            growth: PortfolioService.getDividendGrowth(json[data].dividends)
+          }
+          stocks[data] = stock;
+        }
+        this.setState({
+          ...this.state,
+          stocks,
+          purchases: {
+            ...purchases,
+          }
+        });
+      });
   }
 
   componentDidMount() {
-    // get stuff from express users
-    fetch('/users')
+    // get portfolio from DynamoDB
+    fetch(`${Constant.PORTFOLIO_ENDPOINT}`)
       .then((response) => {
         return response.json();
       })
       .then((portfolio) => {
-        this.setState({
-          ...portfolio
-        })
-        this.fetchStats();
+        let purchases = {};
+        portfolio.forEach((p, index) => {
+          let purchase = {
+            symbol: p.symbol,
+            share: p.share,
+            entry_price: p.entryPrice
+          }
+          purchases['purchase' + index] = purchase;
+        });
+        purchases['purchaseOrder'] = Object.keys(purchases);
+        this.fetchStats(purchases);
       });
   }
 

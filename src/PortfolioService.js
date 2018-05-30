@@ -1,15 +1,30 @@
-export const getMarketPrice = (stocks, purchase) => stocks[purchase.symbol].market_price;
+export const getMarketPrice = (stocks, purchase) => {
+  if (purchase !== undefined && stocks !== undefined) {
+    return stocks[purchase.symbol].market_price;
+  }
+  return 0;
+}
 
 export const getMarketValue = (stocks, purchase) => {
-  if (purchase !== undefined) {
+  if (purchase !== undefined && stocks !== undefined) {
     return getMarketPrice(stocks, purchase) * purchase.share;
   }
   return 0;
 }
 
-export const getDividendPercentage = (stocks, purchase) => stocks[purchase.symbol].dividend_percentage;
+export const getDividendPercentage = (stocks, purchase) => {
+  if (purchase !== undefined && stocks !== undefined) {
+    return stocks[purchase.symbol].dividend_percentage;
+  }
+  return 0;
+}
 
-export const getGrowth = (stocks, purchase) => stocks[purchase.symbol].growth;
+export const getGrowth = (stocks, purchase) => {
+  if (purchase !== undefined && stocks !== undefined) {
+    return stocks[purchase.symbol].growth;
+  }
+  return 0;
+}
 
 export const getEntryValue = (purchase) => purchase.entry_price * purchase.share;
 
