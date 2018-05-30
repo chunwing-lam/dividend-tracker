@@ -83,18 +83,20 @@ class Portfolio extends Component {
         return response.json();
       })
       .then((portfolio) => {
-        let purchases = {};
-        portfolio.forEach((p, index) => {
-          let purchase = {
-            symbol: p.symbol,
-            share: p.share,
-            entry_price: p.entryPrice,
-            key: p.id
-          }
-          purchases['purchase' + index] = purchase;
-        });
-        purchases['purchaseOrder'] = Object.keys(purchases);
-        this.fetchStats(purchases);
+        if (portfolio.length > 0) {
+          let purchases = {};
+          portfolio.forEach((p, index) => {
+            let purchase = {
+              symbol: p.symbol,
+              share: p.share,
+              entry_price: p.entryPrice,
+              key: p.id
+            }
+            purchases['purchase' + index] = purchase;
+          });
+          purchases['purchaseOrder'] = Object.keys(purchases);
+          this.fetchStats(purchases);
+        }
       });
   }
 
