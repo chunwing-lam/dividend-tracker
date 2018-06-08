@@ -24,13 +24,15 @@ module.exports.list = (event, context, callback) => {
       return;
     }
 
+    let sortedByCreated = result.Items.sort((a, b) => a.createdAt - b.createdAt);
+
     // create a response
     const response = {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*'
       },
-      body: JSON.stringify(result.Items),
+      body: JSON.stringify(sortedByCreated),
     };
     callback(null, response);
   });
