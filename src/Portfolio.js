@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Constant } from './Constant';
+import ResultBox from './modules/ResultBox';
 import HeaderRow from './modules/Table/HeaderRow';
 import AdderRow from './modules/Table/AdderRow';
 import PurchasesRow from './modules/Table/PurchasesRow';
@@ -104,6 +105,7 @@ class Portfolio extends Component {
     return (
       <div>
         <div className="portfolio">
+          <ResultBox stocks={this.state} />
           <HeaderRow />
           <PurchasesRow stocks={this.state} onStateChange={this.handleStateChange} onForecastTableChange={this.handleForecastTableChange} />
           <AdderRow stocks={this.state} onStateChange={this.handleStateChange} />

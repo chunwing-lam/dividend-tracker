@@ -82,3 +82,18 @@ export const getEstimateGrowth = (stocks, purchase, years) => {
 
   return estimate;
 }
+
+export const getDividendAverage = (portfolio) => {
+  if (portfolio.purchases.purchaseOrder.length > 0) {
+    return portfolio.purchases.purchaseOrder.map((i) => {
+      return getDividendPercentage(portfolio.stocks, portfolio.purchases[i]);
+    }).reduce((acc, curr) => {
+      return acc + curr
+    }) / portfolio.purchases.purchaseOrder.length;
+  }
+  return 0;
+}
+
+export const getDividendTotal = (stocks) => {
+  return 1;
+}
