@@ -94,6 +94,13 @@ export const getDividendAverage = (portfolio) => {
   return 0;
 }
 
-export const getDividendTotal = (stocks) => {
-  return 1;
+export const getDividendTotal = (portfolio) => {
+  if (portfolio.purchases.purchaseOrder.length > 0) {
+    return portfolio.purchases.purchaseOrder.map((i) => {
+      return getDividend(portfolio.stocks, portfolio.purchases[i]);
+    }).reduce((acc, curr) => {
+      return acc + curr
+    });
+  }
+  return 0;
 }
