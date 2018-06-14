@@ -8,12 +8,14 @@ class ResultBox extends Component {
 
   render() {
     return (
-      <div>
-        <div>
-          Dividend Average = {PortfolioService.getDividendAverage(this.props.stocks)}
+      <div className="result-box">
+        <div className="result-header-rows">
+          <div className="result-header-row">Dividend Average</div>
+          <div className="result-header-row">Dividend Total</div>
         </div>
-        <div>
-          Dividend Total = {PortfolioService.getDividendTotal(this.props.stocks)}
+        <div className="result-rows">
+          <div className="result-row">{PortfolioService.getDividendAverage(this.props.stocks)}</div>
+          <div className="result-row">{PortfolioService.getDividendTotal(this.props.stocks)}</div>
         </div>
       </div>
     );
